@@ -120,7 +120,7 @@ def downgrade() -> None:
                existing_nullable=True)
     op.drop_index(op.f('ix_ai_providers_slug'), table_name='ai_providers')
     op.create_index('ix_ai_providers_slug', 'ai_providers', ['slug'], unique=False)
-    op.create_unique_constraint('providers_slug_key', 'ai_providers', ['slug'])
+    op.create_unique_constraint('ai_providers_slug_key', 'ai_providers', ['slug'])
     op.alter_column('ai_providers', 'id',
                existing_type=sa.UUID(),
                server_default=sa.text('gen_random_uuid()'),
