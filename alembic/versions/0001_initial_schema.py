@@ -53,7 +53,7 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_providers_slug", "ai_providers", ["slug"])
+    op.create_index("ix_ai_providers_slug", "ai_providers", ["slug"])
 
     # ----------------------------------------------------------------
     # api_keys
@@ -89,7 +89,7 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_api_keys_provider_id", "ai_api_keys", ["provider_id"])
+    op.create_index("ix_ai_api_keys_provider_id", "ai_api_keys", ["provider_id"])
 
     # ----------------------------------------------------------------
     # usage_logs
@@ -133,10 +133,10 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_usage_logs_provider_id", "ai_usage_logs", ["provider_id"])
-    op.create_index("ix_usage_logs_model", "ai_usage_logs", ["model"])
-    op.create_index("ix_usage_logs_project_tag", "ai_usage_logs", ["project_tag"])
-    op.create_index("ix_usage_logs_created_at", "ai_usage_logs", ["created_at"])
+    op.create_index("ix_ai_usage_logs_provider_id", "ai_usage_logs", ["provider_id"])
+    op.create_index("ix_ai_usage_logs_model", "ai_usage_logs", ["model"])
+    op.create_index("ix_ai_usage_logs_project_tag", "ai_usage_logs", ["project_tag"])
+    op.create_index("ix_ai_usage_logs_created_at", "ai_usage_logs", ["created_at"])
 
     # ----------------------------------------------------------------
     # rate_limits
@@ -174,7 +174,7 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_rate_limits_provider_id", "ai_rate_limits", ["provider_id"])
+    op.create_index("ix_ai_rate_limits_provider_id", "ai_rate_limits", ["provider_id"])
 
 
 def downgrade() -> None:

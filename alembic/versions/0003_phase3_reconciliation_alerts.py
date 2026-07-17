@@ -62,9 +62,9 @@ def upgrade() -> None:
         sa.Column("status", reconciliation_status_enum, nullable=False),
         sa.Column("checked_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
     )
-    op.create_index("ix_reconciliation_results_provider_id", "ai_reconciliation_results", ["provider_id"])
-    op.create_index("ix_reconciliation_results_period_start", "ai_reconciliation_results", ["period_start"])
-    op.create_index("ix_reconciliation_results_status", "ai_reconciliation_results", ["status"])
+    op.create_index("ix_ai_reconciliation_results_provider_id", "ai_reconciliation_results", ["provider_id"])
+    op.create_index("ix_ai_reconciliation_results_period_start", "ai_reconciliation_results", ["period_start"])
+    op.create_index("ix_ai_reconciliation_results_status", "ai_reconciliation_results", ["status"])
 
     # 3. alerts_sent
     op.create_table(
@@ -76,9 +76,9 @@ def upgrade() -> None:
         sa.Column("window_start", sa.DateTime(timezone=True), nullable=False),
         sa.Column("sent_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
     )
-    op.create_index("ix_alerts_sent_provider_id", "ai_alerts_sent", ["provider_id"])
-    op.create_index("ix_alerts_sent_alert_type", "ai_alerts_sent", ["alert_type"])
-    op.create_index("ix_alerts_sent_window_start", "ai_alerts_sent", ["window_start"])
+    op.create_index("ix_ai_alerts_sent_provider_id", "ai_alerts_sent", ["provider_id"])
+    op.create_index("ix_ai_alerts_sent_alert_type", "ai_alerts_sent", ["alert_type"])
+    op.create_index("ix_ai_alerts_sent_window_start", "ai_alerts_sent", ["window_start"])
 
     # 4. job_runs
     job_status_enum = sa.Enum(
@@ -96,8 +96,8 @@ def upgrade() -> None:
         sa.Column("started_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
         sa.Column("finished_at", sa.DateTime(timezone=True), nullable=True),
     )
-    op.create_index("ix_job_runs_job_name", "ai_job_runs", ["job_name"])
-    op.create_index("ix_job_runs_status", "ai_job_runs", ["status"])
+    op.create_index("ix_ai_job_runs_job_name", "ai_job_runs", ["job_name"])
+    op.create_index("ix_ai_job_runs_status", "ai_job_runs", ["status"])
 
 
 def downgrade() -> None:

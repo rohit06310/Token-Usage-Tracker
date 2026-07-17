@@ -82,8 +82,8 @@ def upgrade() -> None:
                server_default=None,
                existing_nullable=False)
     op.drop_constraint('providers_slug_key', 'ai_providers', type_='unique')
-    op.drop_index('ix_providers_slug', table_name='ai_providers')
-    op.create_index(op.f('ix_providers_slug'), 'ai_providers', ['slug'], unique=True)
+    op.drop_index('ix_ai_providers_slug', table_name='ai_providers')
+    op.create_index(op.f('ix_ai_providers_slug'), 'ai_providers', ['slug'], unique=True)
     op.add_column('ai_rate_limits', sa.Column('budget_usd', sa.Numeric(precision=10, scale=4), nullable=True, comment='Max dollar spend per month'))
     op.alter_column('ai_rate_limits', 'rpm',
                existing_type=sa.INTEGER(),
@@ -143,7 +143,7 @@ def upgrade() -> None:
                existing_type=sa.UUID(),
                server_default=None,
                existing_nullable=False)
-    op.drop_index('ix_usage_logs_created_at', table_name='ai_usage_logs')
+    op.drop_index('ix_ai_usage_logs_created_at', table_name='ai_usage_logs')
     op.add_column('ai_users', sa.Column('preferred_currency', sa.String(length=10), server_default='USD', nullable=False))
     op.alter_column('ai_users', 'id',
                existing_type=sa.UUID(),
@@ -159,7 +159,7 @@ def downgrade() -> None:
                server_default=sa.text('gen_random_uuid()'),
                existing_nullable=False)
     op.drop_column('ai_users', 'preferred_currency')
-    op.create_index('ix_usage_logs_created_at', 'ai_usage_logs', ['created_at'], unique=False)
+    op.create_index('ix_ai_usage_logs_created_at', 'ai_usage_logs', ['created_at'], unique=False)
     op.alter_column('ai_usage_logs', 'id',
                existing_type=sa.UUID(),
                server_default=sa.text('gen_random_uuid()'),
@@ -226,8 +226,8 @@ def downgrade() -> None:
                existing_comment='Requests per minute',
                existing_nullable=True)
     op.drop_column('ai_rate_limits', 'budget_usd')
-    op.drop_index(op.f('ix_providers_slug'), table_name='ai_providers')
-    op.create_index('ix_providers_slug', 'ai_providers', ['slug'], unique=False)
+    op.drop_index(op.f('ix_ai_providers_slug'), table_name='ai_providers')
+    op.create_index('ix_ai_providers_slug', 'ai_providers', ['slug'], unique=False)
     op.create_unique_constraint('providers_slug_key', 'ai_providers', ['slug'])
     op.alter_column('ai_providers', 'id',
                existing_type=sa.UUID(),

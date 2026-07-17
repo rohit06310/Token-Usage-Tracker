@@ -43,7 +43,7 @@ def upgrade() -> None:
             comment="Whether the API call succeeded or failed.",
         ),
     )
-    op.create_index("ix_usage_logs_status", "ai_usage_logs", ["status"])
+    op.create_index("ix_ai_usage_logs_status", "ai_usage_logs", ["status"])
 
     # ----------------------------------------------------------------
     # 2. Create provider_reported_usage
@@ -101,6 +101,6 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_table("ai_provider_reported_usage")
-    op.drop_index("ix_usage_logs_status", table_name="ai_usage_logs")
+    op.drop_index("ix_ai_usage_logs_status", table_name="ai_usage_logs")
     op.drop_column("ai_usage_logs", "status")
     sa.Enum(name="call_status_enum").drop(op.get_bind(), checkfirst=True)

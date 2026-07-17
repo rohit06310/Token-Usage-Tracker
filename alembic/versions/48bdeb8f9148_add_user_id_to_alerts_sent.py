@@ -22,10 +22,10 @@ def upgrade() -> None:
     op.execute('TRUNCATE TABLE alerts_sent CASCADE')
     op.add_column('ai_alerts_sent', sa.Column('user_id', sa.Uuid(), nullable=False))
     op.create_foreign_key('fk_alerts_sent_user_id', 'ai_alerts_sent', 'ai_users', ['user_id'], ['id'], ondelete='CASCADE')
-    op.create_index('ix_alerts_sent_user_id', 'ai_alerts_sent', ['user_id'])
+    op.create_index('ix_ai_alerts_sent_user_id', 'ai_alerts_sent', ['user_id'])
 
 
 def downgrade() -> None:
     op.drop_constraint('fk_alerts_sent_user_id', 'ai_alerts_sent', type_='foreignkey')
-    op.drop_index('ix_alerts_sent_user_id', 'ai_alerts_sent')
+    op.drop_index('ix_ai_alerts_sent_user_id', 'ai_alerts_sent')
     op.drop_column('ai_alerts_sent', 'user_id')
