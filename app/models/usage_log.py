@@ -100,8 +100,8 @@ class UsageLog(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     # Relationship
-    provider: Mapped["Provider"] = relationship("Provider", back_populates="ai_usage_logs")  # noqa: F821
-    user: Mapped["User"] = relationship("User", back_populates="ai_usage_logs")  # noqa: F821
+    provider: Mapped["Provider"] = relationship("Provider", back_populates="usage_logs")  # noqa: F821
+    user: Mapped["User"] = relationship("User", back_populates="usage_logs")  # noqa: F821
 
     @property
     def total_tokens(self) -> int:

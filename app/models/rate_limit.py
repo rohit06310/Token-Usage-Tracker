@@ -62,7 +62,7 @@ class RateLimit(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     # Relationship
-    provider: Mapped["Provider"] = relationship("Provider", back_populates="ai_rate_limits")  # noqa: F821
+    provider: Mapped["Provider"] = relationship("Provider", back_populates="rate_limits")  # noqa: F821
 
     def __repr__(self) -> str:
         return (

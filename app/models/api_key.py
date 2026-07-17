@@ -58,8 +58,8 @@ class ApiKey(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
 
     # Relationship
-    provider: Mapped["Provider"] = relationship("Provider", back_populates="ai_api_keys")  # noqa: F821
-    user: Mapped["User"] = relationship("User", back_populates="ai_api_keys")  # noqa: F821
+    provider: Mapped["Provider"] = relationship("Provider", back_populates="api_keys")  # noqa: F821
+    user: Mapped["User"] = relationship("User", back_populates="api_keys")  # noqa: F821
 
     def __repr__(self) -> str:
         return f"<ApiKey id={self.id!s:.8} label={self.label!r} provider_id={self.provider_id!s:.8} user_id={self.user_id!s:.8}>"
