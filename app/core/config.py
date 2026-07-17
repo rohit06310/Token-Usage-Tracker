@@ -65,7 +65,7 @@ class Settings(BaseSettings):
     gemini_api_key: str | None = None
 
     # --------------------------------------------------------------- CORS --
-    allowed_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
+    allowed_origins: str | list[str] = ["http://localhost:3000", "http://localhost:5173"]
 
     # ----------------------------------------------------------- Scheduler & Alerts --
     scheduler_enabled: bool = True
