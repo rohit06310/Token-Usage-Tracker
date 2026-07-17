@@ -33,7 +33,7 @@ def upgrade() -> None:
     # 2. Insert default user for existing data
     # Hash of 'password' using passlib bcrypt for simplicity, though this is just a placeholder
     default_user_id = '00000000-0000-0000-0000-000000000000'
-    op.execute(f"INSERT INTO users (id, email, hashed_password) VALUES ('{default_user_id}', 'admin@example.com', 'placeholder')")
+    op.execute(f"INSERT INTO ai_users (id, email, hashed_password) VALUES ('{default_user_id}', 'admin@example.com', 'placeholder')")
 
     # 3. Add user_id to api_keys
     op.add_column('ai_api_keys', sa.Column('user_id', sa.Uuid(), server_default=default_user_id, nullable=False))

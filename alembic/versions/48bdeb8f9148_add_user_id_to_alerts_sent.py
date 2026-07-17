@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.execute('TRUNCATE TABLE alerts_sent CASCADE')
+    op.execute('TRUNCATE TABLE ai_alerts_sent CASCADE')
     op.add_column('ai_alerts_sent', sa.Column('user_id', sa.Uuid(), nullable=False))
     op.create_foreign_key('fk_alerts_sent_user_id', 'ai_alerts_sent', 'ai_users', ['user_id'], ['id'], ondelete='CASCADE')
     op.create_index('ix_ai_alerts_sent_user_id', 'ai_alerts_sent', ['user_id'])
