@@ -53,17 +53,17 @@ class UsageLog(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     - status      (for filtering failures)
     """
 
-    __tablename__ = "usage_logs"
+    __tablename__ = "ai_usage_logs"
 
     provider_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
-        ForeignKey("providers.id", ondelete="CASCADE"),
+        ForeignKey("ai_providers.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
     user_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("ai_users.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
         server_default="00000000-0000-0000-0000-000000000000",
@@ -100,8 +100,8 @@ class UsageLog(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     # Relationship
-    provider: Mapped["Provider"] = relationship("Provider", back_populates="usage_logs")  # noqa: F821
-    user: Mapped["User"] = relationship("User", back_populates="usage_logs")  # noqa: F821
+    provider: Mapped["Provider"] = relationship("Provider", back_populates="ai_usage_logs")  # noqa: F821
+    user: Mapped["User"] = relationship("User", back_populates="ai_usage_logs")  # noqa: F821
 
     @property
     def total_tokens(self) -> int:

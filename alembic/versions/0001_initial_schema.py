@@ -28,7 +28,7 @@ def upgrade() -> None:
     # providers
     # ----------------------------------------------------------------
     op.create_table(
-        "providers",
+        "ai_providers",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -53,13 +53,13 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_providers_slug", "providers", ["slug"])
+    op.create_index("ix_providers_slug", "ai_providers", ["slug"])
 
     # ----------------------------------------------------------------
     # api_keys
     # ----------------------------------------------------------------
     op.create_table(
-        "api_keys",
+        "ai_api_keys",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -70,7 +70,7 @@ def upgrade() -> None:
         sa.Column(
             "provider_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("providers.id", ondelete="CASCADE"),
+            sa.ForeignKey("ai_providers.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("encrypted_key", sa.Text, nullable=False),
@@ -89,13 +89,13 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_api_keys_provider_id", "api_keys", ["provider_id"])
+    op.create_index("ix_api_keys_provider_id", "ai_api_keys", ["provider_id"])
 
     # ----------------------------------------------------------------
     # usage_logs
     # ----------------------------------------------------------------
     op.create_table(
-        "usage_logs",
+        "ai_usage_logs",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -106,7 +106,7 @@ def upgrade() -> None:
         sa.Column(
             "provider_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("providers.id", ondelete="CASCADE"),
+            sa.ForeignKey("ai_providers.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("model", sa.String(200), nullable=False),
@@ -133,16 +133,16 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_usage_logs_provider_id", "usage_logs", ["provider_id"])
-    op.create_index("ix_usage_logs_model", "usage_logs", ["model"])
-    op.create_index("ix_usage_logs_project_tag", "usage_logs", ["project_tag"])
-    op.create_index("ix_usage_logs_created_at", "usage_logs", ["created_at"])
+    op.create_index("ix_usage_logs_provider_id", "ai_usage_logs", ["provider_id"])
+    op.create_index("ix_usage_logs_model", "ai_usage_logs", ["model"])
+    op.create_index("ix_usage_logs_project_tag", "ai_usage_logs", ["project_tag"])
+    op.create_index("ix_usage_logs_created_at", "ai_usage_logs", ["created_at"])
 
     # ----------------------------------------------------------------
     # rate_limits
     # ----------------------------------------------------------------
     op.create_table(
-        "rate_limits",
+        "ai_rate_limits",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -153,7 +153,7 @@ def upgrade() -> None:
         sa.Column(
             "provider_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("providers.id", ondelete="CASCADE"),
+            sa.ForeignKey("ai_providers.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("tier_name", sa.String(100), nullable=False),
@@ -174,11 +174,11 @@ def upgrade() -> None:
             nullable=False,
         ),
     )
-    op.create_index("ix_rate_limits_provider_id", "rate_limits", ["provider_id"])
+    op.create_index("ix_rate_limits_provider_id", "ai_rate_limits", ["provider_id"])
 
 
 def downgrade() -> None:
-    op.drop_table("rate_limits")
-    op.drop_table("usage_logs")
-    op.drop_table("api_keys")
-    op.drop_table("providers")
+    op.drop_table("ai_rate_limits")
+    op.drop_table("ai_usage_logs")
+    op.drop_table("ai_api_keys")
+    op.drop_table("ai_providers")

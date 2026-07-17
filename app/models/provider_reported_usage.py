@@ -36,11 +36,11 @@ class ProviderReportedUsage(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     created_at / updated_at  auto-managed timestamps
     """
 
-    __tablename__ = "provider_reported_usage"
+    __tablename__ = "ai_provider_reported_usage"
 
     provider_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
-        ForeignKey("providers.id", ondelete="CASCADE"),
+        ForeignKey("ai_providers.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )

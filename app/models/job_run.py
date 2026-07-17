@@ -17,7 +17,7 @@ class JobRun(UUIDPrimaryKeyMixin, Base):
     """
     Log of scheduled job executions.
     """
-    __tablename__ = "job_runs"
+    __tablename__ = "ai_job_runs"
 
     job_name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     status: Mapped[str] = mapped_column(

@@ -19,13 +19,13 @@ class AlertSent(UUIDPrimaryKeyMixin, Base):
     """
     Log of alerts dispatched.
     """
-    __tablename__ = "alerts_sent"
+    __tablename__ = "ai_alerts_sent"
 
     provider_id: Mapped[uuid.UUID] = mapped_column(
-        Uuid(as_uuid=True), ForeignKey("providers.id", ondelete="CASCADE"), nullable=False, index=True
+        Uuid(as_uuid=True), ForeignKey("ai_providers.id", ondelete="CASCADE"), nullable=False, index=True
     )
     user_id: Mapped[uuid.UUID] = mapped_column(
-        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+        Uuid(as_uuid=True), ForeignKey("ai_users.id", ondelete="CASCADE"), nullable=False, index=True
     )
     alert_type: Mapped[str] = mapped_column(String(50), nullable=False, index=True)  # 'tpm', 'rpm', 'rpd'
     threshold_percent: Mapped[Decimal] = mapped_column(Numeric(5, 2), nullable=False)

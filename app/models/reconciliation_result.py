@@ -19,10 +19,10 @@ class ReconciliationResult(UUIDPrimaryKeyMixin, Base):
     """
     Stores reconciliation results for a provider over a specific period.
     """
-    __tablename__ = "reconciliation_results"
+    __tablename__ = "ai_reconciliation_results"
 
     provider_id: Mapped[uuid.UUID] = mapped_column(
-        Uuid(as_uuid=True), ForeignKey("providers.id", ondelete="CASCADE"), nullable=False, index=True
+        Uuid(as_uuid=True), ForeignKey("ai_providers.id", ondelete="CASCADE"), nullable=False, index=True
     )
     period_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
     period_end: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

@@ -34,11 +34,11 @@ class RateLimit(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     created_at / updated_at  auto-managed timestamps
     """
 
-    __tablename__ = "rate_limits"
+    __tablename__ = "ai_rate_limits"
 
     provider_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
-        ForeignKey("providers.id", ondelete="CASCADE"),
+        ForeignKey("ai_providers.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -62,7 +62,7 @@ class RateLimit(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     # Relationship
-    provider: Mapped["Provider"] = relationship("Provider", back_populates="rate_limits")  # noqa: F821
+    provider: Mapped["Provider"] = relationship("Provider", back_populates="ai_rate_limits")  # noqa: F821
 
     def __repr__(self) -> str:
         return (

@@ -34,7 +34,7 @@ def upgrade() -> None:
     call_status_enum.create(op.get_bind(), checkfirst=True)
 
     op.add_column(
-        "usage_logs",
+        "ai_usage_logs",
         sa.Column(
             "status",
             call_status_enum,
@@ -43,13 +43,13 @@ def upgrade() -> None:
             comment="Whether the API call succeeded or failed.",
         ),
     )
-    op.create_index("ix_usage_logs_status", "usage_logs", ["status"])
+    op.create_index("ix_usage_logs_status", "ai_usage_logs", ["status"])
 
     # ----------------------------------------------------------------
     # 2. Create provider_reported_usage
     # ----------------------------------------------------------------
     op.create_table(
-        "provider_reported_usage",
+        "ai_provider_reported_usage",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -60,7 +60,7 @@ def upgrade() -> None:
         sa.Column(
             "provider_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("providers.id", ondelete="CASCADE"),
+            sa.ForeignKey("ai_providers.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("period_start", sa.DateTime(timezone=True), nullable=False),
@@ -89,18 +89,18 @@ def upgrade() -> None:
     )
     op.create_index(
         "ix_provider_reported_usage_provider_id",
-        "provider_reported_usage",
+        "ai_provider_reported_usage",
         ["provider_id"],
     )
     op.create_index(
         "ix_provider_reported_usage_period_start",
-        "provider_reported_usage",
+        "ai_provider_reported_usage",
         ["period_start"],
     )
 
 
 def downgrade() -> None:
-    op.drop_table("provider_reported_usage")
-    op.drop_index("ix_usage_logs_status", table_name="usage_logs")
-    op.drop_column("usage_logs", "status")
+    op.drop_table("ai_provider_reported_usage")
+    op.drop_index("ix_usage_logs_status", table_name="ai_usage_logs")
+    op.drop_column("ai_usage_logs", "status")
     sa.Enum(name="call_status_enum").drop(op.get_bind(), checkfirst=True)

@@ -30,17 +30,17 @@ class ApiKey(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     To use the key, call FernetEncryption.decrypt(api_key_row.encrypted_key).
     """
 
-    __tablename__ = "api_keys"
+    __tablename__ = "ai_api_keys"
 
     provider_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
-        ForeignKey("providers.id", ondelete="CASCADE"),
+        ForeignKey("ai_providers.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
     user_id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("ai_users.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
         server_default="00000000-0000-0000-0000-000000000000",
@@ -58,8 +58,8 @@ class ApiKey(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
 
     # Relationship
-    provider: Mapped["Provider"] = relationship("Provider", back_populates="api_keys")  # noqa: F821
-    user: Mapped["User"] = relationship("User", back_populates="api_keys")  # noqa: F821
+    provider: Mapped["Provider"] = relationship("Provider", back_populates="ai_api_keys")  # noqa: F821
+    user: Mapped["User"] = relationship("User", back_populates="ai_api_keys")  # noqa: F821
 
     def __repr__(self) -> str:
         return f"<ApiKey id={self.id!s:.8} label={self.label!r} provider_id={self.provider_id!s:.8} user_id={self.user_id!s:.8}>"

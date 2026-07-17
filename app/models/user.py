@@ -21,7 +21,7 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     created_at / updated_at  auto-managed timestamps
     """
 
-    __tablename__ = "users"
+    __tablename__ = "ai_users"
 
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)

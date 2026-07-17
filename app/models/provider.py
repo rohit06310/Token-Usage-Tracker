@@ -28,7 +28,7 @@ class Provider(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     updated_at  Auto-managed UTC timestamp
     """
 
-    __tablename__ = "providers"
+    __tablename__ = "ai_providers"
 
     name: Mapped[str] = mapped_column(String(120), nullable=False, unique=True)
     slug: Mapped[str] = mapped_column(String(60), nullable=False, unique=True, index=True)
