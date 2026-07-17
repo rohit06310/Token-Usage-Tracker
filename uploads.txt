@@ -1,0 +1,54 @@
+======================================================
+DEPLOYMENT GUIDE: VERCEL (FRONTEND) & RENDER (BACKEND)
+======================================================
+
+You have successfully pushed your repository, including the `vercel.json` and `render.yaml` configuration files, to GitHub. Follow these exact steps to get both your backend and frontend live.
+
+------------------------------------------------------
+STEP 1: DEPLOY THE BACKEND (RENDER)
+------------------------------------------------------
+Render will host your FastAPI backend via Docker. It reads the `render.yaml` file to automatically configure the service.
+
+1. Go to the Render Dashboard: https://dashboard.render.com/
+2. Click "New" (top right) -> "Blueprint".
+3. Connect your GitHub account and select this repository (Token-Usage-Tracker).
+4. Render will detect the `render.yaml` file automatically.
+5. Render will prompt you for the required environment variables. You MUST provide:
+   - DATABASE_URL: Your production Supabase connection string.
+   - FERNET_KEY: The encryption key (from `python scripts/generate_keys.py`).
+   - DASHBOARD_API_KEY: The API key (from `python scripts/generate_keys.py`).
+   - SECRET_KEY: A secure random string for JWT auth.
+   - ALLOWED_ORIGINS: Temporarily set this to '["*"]' so it works while you deploy the frontend.
+6. Click "Apply".
+7. Wait for the Docker build to finish. Once live, copy your backend URL (e.g., https://ai-usage-dashboard-api.onrender.com).
+
+------------------------------------------------------
+STEP 2: DEPLOY THE FRONTEND (VERCEL)
+------------------------------------------------------
+Vercel will host your Next.js frontend. It reads the `vercel.json` file to know how to build your app from the `frontend/` directory.
+
+1. Go to the Vercel Dashboard: https://vercel.com/dashboard
+2. Click "Add New" -> "Project".
+3. Import this GitHub repository (Token-Usage-Tracker).
+4. Do NOT change the Root Directory setting (leave it as `./`), the `vercel.json` file will handle it.
+5. Open the "Environment Variables" section before deploying.
+6. Add your necessary frontend variables. Most importantly, link the backend:
+   - NEXT_PUBLIC_API_URL = [Paste the Render backend URL you copied in Step 1]
+7. Click "Deploy".
+8. Once deployed, copy your new Vercel domain URL (e.g., https://token-usage-tracker.vercel.app).
+
+------------------------------------------------------
+STEP 3: FINAL CORS CONFIGURATION
+------------------------------------------------------
+To ensure security, you must restrict which domains can access your backend API.
+
+1. Go back to your Render Dashboard.
+2. Select your deployed Web Service (ai-usage-dashboard-api).
+3. Go to the "Environment" tab.
+4. Edit the `ALLOWED_ORIGINS` variable.
+5. Change it from '["*"]' to exactly match your Vercel URL.
+   Example: '["https://token-usage-tracker.vercel.app"]'
+   (Make sure there is NO trailing slash at the end of the URL).
+6. Click "Save Changes". Render will quickly restart the service with the new security rule.
+
+Your unified AI dashboard is now fully deployed and secure!
