@@ -1,8 +1,9 @@
 services:
   - type: web
     name: ai-usage-dashboard-api
-    env: docker
-    dockerfilePath: docker/Dockerfile
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
     plan: free
     healthCheckPath: /health
     envVars:
