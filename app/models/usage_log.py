@@ -13,8 +13,8 @@ from sqlalchemy.dialects.postgresql import JSONB as PGJSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import JSON, Uuid
 
-# Use JSONB on PostgreSQL, fall back to JSON on other dialects (e.g., SQLite in tests)
-JsonColumn = PGJSONB().with_variant(JSON(), "sqlite")
+# Use standard JSON on MySQL/SQLite, upgrade to JSONB on PostgreSQL
+JsonColumn = JSON().with_variant(PGJSONB(), "postgresql")
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
