@@ -36,7 +36,7 @@ export default function PlaygroundPage() {
     try {
       if (isStreaming) {
         const token = localStorage.getItem("token"); // Fallback for auth if needed
-        const res = await fetch("http://localhost:8000/api/v1/completions/", {
+        const res = await fetch("/api/proxy/completions/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
