@@ -1,69 +1,102 @@
 /**
  * POST /api/auth/login
  *
- * Validates the provided API key against the FastAPI backend (health check),
- * then sets an httpOnly session cookie so the raw key is never exposed to
- * browser JavaScript.
+ * Authenticates the user against the FastAPI backend.
+ * If successful, stores the JWT in an httpOnly cookie.
  */
+
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
+const BACKEND_URL = process.env.BACKEND_URL;
+
+if (!BACKEND_URL) {
+  throw new Error(
+    "BACKEND_URL environment variable is not configured."
+  );
+}
 
 export async function POST(request: NextRequest) {
-  let body: { email?: string; password?: string };
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ message: "Invalid request body" }, { status: 400 });
-  }
+    const body = await request.json();
 
-  const email = body?.email?.trim();
-  const password = body?.password;
-  
-  if (!email || !password) {
-    return NextResponse.json({ message: "Email and password are required" }, { status: 400 });
-  }
+    const email = body.email?.trim();
+    const password = body.password;
 
-  // Authenticate against the FastAPI backend
-  try {
+    if (!email || !password) {
+      return NextResponse.json(
+        {
+          message: "Email and password are required.",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
     const formData = new URLSearchParams();
     formData.append("username", email);
     formData.append("password", password);
 
-    const verifyRes = await fetch(`${BACKEND_URL}/api/v1/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData,
-      signal: AbortSignal.timeout(8000),
-    });
+    const backendResponse = await fetch(
+      `${BACKEND_URL}/api/v1/auth/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/x-www-form-urlencoded",
+        },
+        body: formData,
+        cache: "no-store",
+      }
+    );
 
-    if (!verifyRes.ok) {
+    if (!backendResponse.ok) {
+      const error = await backendResponse.text();
+
+      console.error(
+        "Backend authentication failed:",
+        error
+      );
+
       return NextResponse.json(
-        { message: "Invalid email or password." },
-        { status: 401 }
+        {
+          message: "Invalid email or password.",
+        },
+        {
+          status: backendResponse.status,
+        }
       );
     }
 
-    const data = await verifyRes.json();
-    const accessToken = data.access_token;
+    const data = await backendResponse.json();
 
-    // Set the httpOnly session cookie containing the JWT
-    const response = NextResponse.json({ success: true });
-    response.cookies.set("ai_session", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 60 * 24, // 24 hours
+    const response = NextResponse.json({
+      success: true,
     });
 
-    return response;
+    response.cookies.set(
+      "ai_session",
+      data.access_token,
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24,
+      }
+    );
 
-  } catch (err) {
-    console.error("[auth/login] Backend unreachable:", err);
+    return response;
+  } catch (error) {
+    console.error("Login Route Error:", error);
+
     return NextResponse.json(
-      { message: "Backend unreachable. Please ensure the API server is running." },
-      { status: 503 }
+      {
+        message: "Backend unreachable.",
+      },
+      {
+        status: 503,
+      }
     );
   }
 }
