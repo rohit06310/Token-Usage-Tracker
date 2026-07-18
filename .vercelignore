@@ -1,4 +1,4 @@
-app/
+/app/
 alembic/
 alembic.ini
 pytest.ini
